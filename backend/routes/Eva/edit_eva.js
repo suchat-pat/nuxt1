@@ -23,7 +23,7 @@ router.put('/editname',verifyToken,requireRole('ผู้รับการป�
             `update tb_member set first_name=?,last_name=?,email=?,username=? where id_member=?`,
             [first_name,last_name,email,username,id_member]
         )
-        res.json(rows[0])
+        res.status(200).json({message:'Edit Success'},rows[0])
     }catch(err){
         console.error("Error GET Progile",err)
         res.status(500).json({ message:'Error GET Progile' })
@@ -39,7 +39,7 @@ router.put('/editpass',verifyToken,requireRole('ผู้รับการป�
             `update tb_member set first_name=?,last_name=?,email=?,username=?,password=? where id_member=?`,
             [first_name,last_name,email,username,hashPassword,id_member]
         )
-        res.json(rows[0])
+        res.status(200).json({message:'Edit Success'},rows[0])
     }catch(err){
         console.error("Error GET Progile",err)
         res.status(500).json({ message:'Error GET Progile' })

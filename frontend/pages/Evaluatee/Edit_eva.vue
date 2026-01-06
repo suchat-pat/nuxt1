@@ -33,7 +33,7 @@
                                     <v-alert>{{ form.role || 'ไม่มีตำแหน่ง' }}</v-alert>
                                 </v-col>
                                 <v-col cols="12" class="text-center">
-                                    <v-btn color="#7d0c14" type="submit">สมัคร</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;<v-btn color="#7d0c14" type="reset">ยกเลิก</v-btn>
+                                    <v-btn color="green" type="submit">สมัคร</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;<v-btn color="error" type="reset">ยกเลิก</v-btn>
                                 </v-col>
                             </v-row>
                         </v-form>
