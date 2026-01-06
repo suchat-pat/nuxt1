@@ -17,11 +17,41 @@
 </template>
 
 <script setup lang="ts">
+import axios from 'axios';
+import { computed, onMounted } from 'vue';
 import { useDisplay } from 'vuetify';
 const {mdAndDown} = useDisplay()
 const isMobile = computed(() => mdAndDown.value)
 const drawer = ref(false)
 const user = ref({})
+const token = process.client ? localStorage.getItem('token') : null
+const roles = [
+    //Staff
+    {title:'หน้าหลัก',to:'/Staff/',role:'ฝ่ายบุคลากร'},
+
+    //Commit
+    {title:'รายชื่อผู้รับการประเมิน',to:'/Committee/',role:'กรรมการประเมิน'},
+
+    //Eva
+    {title:'หน้าหลัก',to:'/Evaluatee/',role:'ผู้รับการประเมินผล'},
+]
+const navitem = computed(() =>
+    roles.filter((item) => item.role.includes(user.value.role))
+)
+const logout = async () =>{
+    if(!confirm('ต้องการออกจากระบบใช่หรือไม่'))return
+    localStorage.removeItem('token')
+    navigateTo('/')
+}
+const fetchUser = async () =>{
+    try{
+        const res = await axios.get(`http://localhost:3001/api/profile`,{headers:{Authorization:`Bearer ${token}`}})
+        user.value = res.data
+    }catch(err){
+        console.error('error GET Profile',err)
+    }
+}
+onMounted(fetchUser)
 </script>
 
 <style scoped>
