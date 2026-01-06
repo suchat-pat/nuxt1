@@ -7,7 +7,7 @@
                     <v-sheet color="#404040" class="pa-6 text-center">
                         <h1 class="text-h5 font-weight-bold text-white mb-2">แก้ไขข้อมูลส่วนตัว</h1>
                     </v-sheet>
-
+                    
                     <v-card-text class="pa-6">
                         <v-form @submit.prevent="saveMember">
                             <v-row>
@@ -33,7 +33,7 @@
                                     <v-alert>{{ form.role || 'ไม่มีตำแหน่ง' }}</v-alert>
                                 </v-col>
                                 <v-col cols="12" class="text-center">
-                                    <v-btn color="green" type="submit">สมัคร</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;<v-btn color="error" type="reset">ยกเลิก</v-btn>
+                                    <v-btn color="green" type="submit">แก้ไข</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;<v-btn color="error" type="reset">ยกเลิก</v-btn>
                                 </v-col>
                             </v-row>
                         </v-form>
@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted } from 'vue'
+
 const form = ref({
     first_name:'',
     last_name:'',
@@ -57,8 +57,10 @@ const form = ref({
     role:'',
 })
 const error = ref<Record<string,string>>({})
+const newPassword = ref('')
 const confirmPassword = ref('')
 const emailReget = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
+const token = process.client ? localStorage.getItem('token') : null
 function vaildateFrom(){
     error.value = {}
     const f = form.value
@@ -68,7 +70,7 @@ function vaildateFrom(){
     else if(!emailReget.test(f.email.trim()))error.value.email='รูปแบบอีเมลไม่ถูกต้อง'
     if(!f.username.trim())error.value.username='กรุณากรอกชื่อผู้ใช้'
     else if(f.username.trim().length < 4)error.value.username='ต้องมีอย่างน้อย 4 ตัวอักษร'
-    if(f.password.trim()){
+    if(f.password && f.password.trim()){
         if(f.password.trim().length < 6)error.value.password='ต้องมีอย่างน้อย 6 ตัวอักษร'
         if(!confirmPassword.value.trim())error.value.confirmPassword='กรุณายืนยันรหัสผ่าน'
         else if(confirmPassword.value.trim() != f.password.trim())error.value.confirmPassword='รหัสผ่านไม่ตรงกัน'
@@ -76,11 +78,10 @@ function vaildateFrom(){
     if(!f.role.trim())error.value.role='กรุณาเลือกประเภทสมาชิก'
     return Object.keys(error.value).length === 0
 }
-const user = ref({})
 const fetchUser = async () =>{
     try{
         const res = await axios.get(`http://localhost:3001/api/Eva/edit_eva`,{headers:{Authorization:`Bearer ${token}`}})
-        user.value = res.data
+        form.value = res.data
     }catch(err){
         console.error('error GET Profile',err)
     }
@@ -88,7 +89,7 @@ const fetchUser = async () =>{
 onMounted(fetchUser)
 const saveMember = async () =>{
     if(!vaildateFrom())return
-    if(form.value.password.length > 0){
+    if(form.value.password && form.value.password.trim()){
         try{
             await axios.put(`http://localhost:3001/api/Eva/edit_eva/editpass`,form.value,{headers:{Authorization:`Bearer ${token}`}})
             alert('แก้ไขสำเร็จ')

@@ -29,8 +29,8 @@ const {mdAndDown} = useDisplay()
 const isMobile = computed(() => mdAndDown.value)
 const drawer = ref(false)
 const user = ref({})
-const token = process.client ? localStorage.getItem('token') : null
-// if(!token)navigateTo('/')
+// const token = process.client ? localStorage.getItem('token') : null
+// if(token === null)navigateTo('/')
 const roles = [
     //Staff
     {title:'หน้าหลัก',to:'/Staff/',role:'ฝ่ายบุคลากร'},
@@ -51,6 +51,8 @@ const logout = async () =>{
     navigateTo('/')
 }
 const fetchUser = async () =>{
+    const token = localStorage.getItem('token')
+    if(token === null)navigateTo('/')
     try{
         const res = await axios.get(`http://localhost:3001/api/profile`,{headers:{Authorization:`Bearer ${token}`}})
         user.value = res.data
