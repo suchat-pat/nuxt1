@@ -6,13 +6,18 @@
             <div>ผู้ใช้งาน : {{ user.first_name }} {{ user.last_name }} <br> {{ user.role }}</div>
             <v-btn class="bg-white" @click="logout">ออกจากระบบ</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;
         </v-app-bar>
-        <v-navigation-drawer color="#4A4A4A" v-model="drawer" app :temporary="isMobile" :permanent="!isMobile">
+        <v-navigation-drawer color="#404040" v-model="drawer" app :temporary="isMobile" :permanent="!isMobile">
             <v-list>
                 <v-list-item v-for="item in navitem" :key="item.title" :to="item.to">
                     <v-list-item-title>{{ item.title }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-navigation-drawer>
+        <v-main>
+            <v-container fluid class="ma-2">
+                <NuxtPage />
+            </v-container>
+        </v-main>
     </v-app>
 </template>
 
@@ -25,6 +30,7 @@ const isMobile = computed(() => mdAndDown.value)
 const drawer = ref(false)
 const user = ref({})
 const token = process.client ? localStorage.getItem('token') : null
+// if(!token)navigateTo('/')
 const roles = [
     //Staff
     {title:'หน้าหลัก',to:'/Staff/',role:'ฝ่ายบุคลากร'},
