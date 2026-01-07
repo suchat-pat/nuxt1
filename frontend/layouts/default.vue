@@ -51,8 +51,10 @@ const logout = async () =>{
     navigateTo('/')
 }
 const fetchUser = async () =>{
-    const token = localStorage.getItem('token')
-    if(token === null)navigateTo('/')
+    const token = localStorage.getItem('token') || null
+    if(!token){
+        return await navigateTo('/', { replace: true })
+    }
     try{
         const res = await axios.get(`http://localhost:3001/api/profile`,{headers:{Authorization:`Bearer ${token}`}})
         user.value = res.data
