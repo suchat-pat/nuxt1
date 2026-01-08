@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="12">
                 <v-form v-if="user.status_eva === 2 || user.status_eva === 3">
-                    <h1 class="text-h5 font-weight-bold">แบบประเมินตนเอง</h1>
+                    <h1 class="text-h5 font-weight-bold">คะแนนประเมินตนเอง</h1>
                     <v-card class="pa-2 mt-2">
                         <p>ชื่อ - นามสกุล : {{ user.first_name }} {{ user.last_name }}</p>
                         <p>รอบการประเมินที่ : {{ user.round_sys }} ปี {{ user.year_sys }}</p>
@@ -32,6 +32,7 @@
                         </v-col>
                     </v-row>
                 </v-form>
+                
                 <v-alert v-else-if="user.status_eva === 1" type="info">คุณยังไม่ได้ประเมินตนเอง</v-alert>
                 <v-alert v-else type="warning">คุณยังไม่มีแบบประเมิน</v-alert>
             </v-col>
