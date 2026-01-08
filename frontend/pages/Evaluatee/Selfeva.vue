@@ -2,7 +2,7 @@
     <v-container>
         <v-row>
             <v-col cols="12">
-                <v-form @submit.prevent="saveScore">
+                <v-form v-if="user.status_eva === 1" @submit.prevent="saveScore">
                     <h1 class="text-h5 font-weight-bold">แบบประเมินตนเอง</h1>
                     <v-card class="pa-2 mt-2">
                         <p>ชื่อ - นามสกุล : {{ user.first_name }} {{ user.last_name }}</p>
@@ -30,6 +30,8 @@
                         <v-btn color="success" type="submit">บันทึกคะแนน</v-btn><br><br><br><br>
                     </div>
                 </v-form>
+                <v-alert v-if="user.status_eva === 2 || user.status_eva === 3" type="success">คุณกรอกแบบประเมินล้ว</v-alert>
+                <v-alert v-else type="warning">คุณยังไม่มีแบบประเมิน</v-alert>
             </v-col>
         </v-row>
     </v-container>
@@ -91,7 +93,7 @@ const saveScore = async () =>{
     }
     formData.append('scores',JSON.stringify(allScore))
     try{
-        await axios.post(`http://localhost:3001/api/Eva/selfeva/indicate`,formData,{headers:{Authorization:`Bearer ${token}`}})
+        await axios.post(`http://localhost:3001/api/Eva/selfeva/savescore`,formData,{headers:{Authorization:`Bearer ${token}`}})
         alert('บันทึกคะแนนสำเร็จ')
         await Promise.all([fetchTopic(),fetchUser()])
     }catch(err){
