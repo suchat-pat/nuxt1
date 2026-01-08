@@ -3,7 +3,7 @@ const pool = mysql.createPool({
     host:'mysql',
     user:'root',
     password:'1234',
-    database:'a1',
+    database:'nuxt1',
     dateString: true,
     timezone: '+07:00',
 })

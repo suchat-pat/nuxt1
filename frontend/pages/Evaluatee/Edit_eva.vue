@@ -1,0 +1,118 @@
+<template>
+    <v-container fluid class="fill-height">
+        <v-row justify="center" align="center">
+            <v-col cols="12">
+                <v-card>
+                    
+                    <v-sheet color="#404040" class="pa-6 text-center">
+                        <h1 class="text-h5 font-weight-bold text-white mb-2">แก้ไขข้อมูลส่วนตัว</h1>
+                    </v-sheet>
+                    
+                    <v-card-text class="pa-6">
+                        <v-form @submit.prevent="saveMember">
+                            <v-row>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="ชื่อ" v-model="form.first_name" :error-messages="error.first_name"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="นามสกุล" v-model="form.last_name" :error-messages="error.last_name"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="อีเมล" v-model="form.email" :error-messages="error.email"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="ชื่อผู้ใช้" v-model="form.username" :error-messages="error.username"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="รหัสผ่านใหม่ (กรอกเฉพาะตอนจะเปลี่ยน)" type="password" v-model="form.password" :error-messages="error.password"></v-text-field>
+                                </v-col>
+                                <v-col cols="12" md="6">
+                                    <v-text-field label="ยืนยันรหัสผ่าน" type="password" v-model="confirmPassword" :error-messages="error.confirmPassword"></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-alert>{{ form.role || 'ไม่มีตำแหน่ง' }}</v-alert>
+                                </v-col>
+                                <v-col cols="12" class="text-center">
+                                    <v-btn color="green" type="submit">แก้ไข</v-btn>&nbsp;&nbsp;&nbsp;&nbsp;<v-btn color="error" type="reset">ยกเลิก</v-btn>
+                                </v-col>
+                            </v-row>
+                        </v-form>
+                    </v-card-text>
+
+                </v-card>
+            </v-col>
+        </v-row>
+    </v-container>
+</template>
+
+<script setup lang="ts">
+import axios from 'axios'
+
+const form = ref({
+    first_name:'',
+    last_name:'',
+    email:'',
+    username:'',
+    password:'',
+    role:'',
+})
+const error = ref<Record<string,string>>({})
+const newPassword = ref('')
+const confirmPassword = ref('')
+const emailReget = /^[^\s]+@[^\s]+\.[^\s]{2,}$/i
+const token = process.client ? localStorage.getItem('token') : null
+function vaildateFrom(){
+    error.value = {}
+    const f = form.value
+    if(!f.first_name.trim())error.value.first_name='กรุณากรอกชื่อ'
+    if(!f.last_name.trim())error.value.last_name='กรุณากรอกนามสกุล'
+    if(!f.email.trim())error.value.email='กรุณากรอกอีเมล'
+    else if(!emailReget.test(f.email.trim()))error.value.email='รูปแบบอีเมลไม่ถูกต้อง'
+    if(!f.username.trim())error.value.username='กรุณากรอกชื่อผู้ใช้'
+    else if(f.username.trim().length < 4)error.value.username='ต้องมีอย่างน้อย 4 ตัวอักษร'
+    if(f.password && f.password.trim()){
+        if(f.password.trim().length < 6)error.value.password='ต้องมีอย่างน้อย 6 ตัวอักษร'
+        if(!confirmPassword.value.trim())error.value.confirmPassword='กรุณายืนยันรหัสผ่าน'
+        else if(confirmPassword.value.trim() != f.password.trim())error.value.confirmPassword='รหัสผ่านไม่ตรงกัน'
+    }
+    if(!f.role.trim())error.value.role='กรุณาเลือกประเภทสมาชิก'
+    return Object.keys(error.value).length === 0
+}
+const fetchUser = async () =>{
+    try{
+        const res = await axios.get(`http://localhost:3001/api/Eva/edit_eva`,{headers:{Authorization:`Bearer ${token}`}})
+        form.value = res.data
+    }catch(err){
+        console.error('error GET Profile',err)
+    }
+}
+onMounted(fetchUser)
+const saveMember = async () =>{
+    if(!vaildateFrom())return
+    if(form.value.password && form.value.password.trim()){
+        try{
+            await axios.put(`http://localhost:3001/api/Eva/edit_eva/editpass`,form.value,{headers:{Authorization:`Bearer ${token}`}})
+            alert('แก้ไขสำเร็จ')
+            localStorage.removeItem('token')
+            navigateTo('/')
+        }catch(err){
+            console.error('แก้ไขไม่สำเร็จ',err)
+        }
+    }else{
+        try{
+            await axios.put(`http://localhost:3001/api/Eva/edit_eva/editname`,form.value,{headers:{Authorization:`Bearer ${token}`}})
+            alert('แก้ไขสำเร็จ')
+            localStorage.removeItem('token')
+            navigateTo('/')
+        }catch(err){
+            console.error('แก้ไขไม่สำเร็จ',err)
+        }
+    }
+}
+</script>
+
+<style scoped>
+.text-maroon{
+    color: #7d0c14;
+}
+</style>

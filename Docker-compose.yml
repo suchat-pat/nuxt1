@@ -1,4 +1,4 @@
-services: 
+services:
   frontend:
     build: ./frontend
     depends_on:
@@ -12,10 +12,52 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-    nerworks: ["app-network"]
+    networks: ["app-network"]
 
   backend:
     build: ./backend
     depends_on:
-      - backend
-    
+      - mysql
+    container_name: Backtend_Container
+    ports: ["3001:3001"]
+    restart: always
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: 1234
+      DB_NAME: nuxt1
+      JWT_SECRET: NTC&&1234
+      CHOKIDAR_USEPOLLING: true
+    networks: ["app-network"]
+
+  phpmyadmin:
+    image: phpmyadmin
+    depends_on:
+      - mysql
+    container_name: PMA_Container
+    ports: ["8080:80"]
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: 1234
+    networks: ["app-network"]
+  
+  mysql:
+    image: mysql:8.0
+    container_name: MYSQL_Container
+    ports: ["3307:3306"]
+    restart: always
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: nuxt1
+    networks: ["app-network"]
+
+networks:
+  app-network:
+    driver: bridge

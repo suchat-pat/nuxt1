@@ -1,6 +1,6 @@
 require('dotenv').config()
-const express = requrie('express')
-const fileupload = requrie('express-fileupload')
+const express = require('express')
+const fileupload = require('express-fileupload')
 const cors = require('cors')
 const app = express()
 const path = require('path')
@@ -13,6 +13,15 @@ app.use(cors ({
 app.use(express.json())
 app.use(fileupload())
 app.use('/uploads',express.static(path.join('uploads')))
+
+const auth = require('./routes/auth')
+app.use('/api/auth',auth)
+
+const profile = require('./routes/profile')
+app.use('/api/profile',profile)
+
+const edit_eva = require('./routes/Eva/edit_eva')
+app.use('/api/Eva/edit_eva',edit_eva)
 
 app.use((req,res) => res.status(404).json({message:'ปิดปรับปรุง!'}))
 app.listen(3001 , () => console.log('Server Running On Port 3001'))
