@@ -26,13 +26,9 @@
 </template>
 
 <script setup lang="ts">
-<<<<<<< HEAD
-import api from '~/api/api'
 
-=======
 // ใน Nuxt 3 ไม่ต้อง import ref, useRouter (Auto-import)
 import api from '../API/api'; 
->>>>>>> 0447136f3ea164cdb07b31d5e1dadfe52b1715c6
 definePageMeta({
     layout: false
 })
