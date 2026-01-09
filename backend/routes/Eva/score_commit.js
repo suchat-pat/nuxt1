@@ -44,7 +44,7 @@ router.get('/commit',verifyToken,requireRole('ผู้รับการปร�
     try{
         const id_member = req.user.id_member
         const [rows] = await db.query(
-            `select * from tb_member m,tb_eva e,tb_system s,tb_commit c where e.id_member=? and e.id_eva=c.id_eva and e.id_member=m.id_member and e.id_sys=s.id_sys order by e.id_eva desc`,
+            `select * from tb_member m,tb_eva e,tb_system s,tb_commit c where e.id_member=? and e.id_eva=c.id_eva and c.id_member=m.id_member and e.id_sys=s.id_sys order by e.id_eva desc`,
             [id_member]
         )
         res.json(rows)

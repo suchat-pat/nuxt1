@@ -45,6 +45,7 @@ const roles = [
     {title:'แก้ไขข้อมูลส่วนตัว',to:'/Evaluatee/Edit_eva',role:'ผู้รับการประเมินผล'},
     {title:'แบบประเมินตนเอง',to:'/Evaluatee/Selfeva',role:'ผู้รับการประเมินผล'},
     {title:'ตรวจสอบคะแนนประเมิน',to:'/Evaluatee/Check_score',role:'ผู้รับการประเมินผล'},
+    {title:'รายงานผล',to:'/Evaluatee/Report_eva',role:'ผู้รับการประเมินผล'},
 ]
 const navitem = computed(() =>
     roles.filter((item) => item.role.includes(user.value.role))
@@ -70,5 +71,31 @@ onMounted(fetchUser)
 </script>
 
 <style scoped>
+@media print {
+    /* ซ่อนปุ่มและ Navbar ของ Vuetify */
+    .d-print-none,
+    .v-app-bar, 
+    .v-navigation-drawer {
+        display: none !important;
+    }
 
+    /* ปรับ Layout ให้เต็มหน้ากระดาษ */
+    .v-main {
+        padding: 0px !important;
+        margin: 0px !important;
+        width: 100vw !important;
+    }
+
+    /* ปรับ Container ให้ไม่เหลือขอบขาวเยอะเกินไป */
+    /* .v-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    } */
+    
+    /* ตั้งค่าหน้ากระดาษ */
+    /* @page {
+        size: auto;
+        margin: 10mm;
+    } */
+}
 </style>
