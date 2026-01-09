@@ -43,7 +43,8 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { onMounted } from 'vue';
-
+const id_eva = useRoute().params.id_eva
+console.log("id_eva:",id_eva)
 const user = ref({})
 const topics = ref([])
 const token = process.client ? localStorage.getItem('token') : null
@@ -54,7 +55,7 @@ const view = (filename:string) =>{
 }
 const fetchUser = async () =>{
     try{
-        const res = await axios.get(`http://localhost:3001/api/Eva/score_member/user`,{headers:{Authorization:`Bearer ${token}`}})
+        const res = await axios.get(`http://localhost:3001/api/Commit/detail_eva/user/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         user.value = res.data
     }catch(err){
         console.error('Get User Error',err)
@@ -62,7 +63,7 @@ const fetchUser = async () =>{
 }
 const fetchTopic = async () =>{
     try{
-        const res = await axios.get(`http://localhost:3001/api/Eva/score_member/indicate`,{headers:{Authorization:`Bearer ${token}`}})
+        const res = await axios.get(`http://localhost:3001/api/Commit/detail_eva/indicate/${id_eva}`,{headers:{Authorization:`Bearer ${token}`}})
         topics.value = res.data
         // console.log("Topic:",topic.value)
     }catch(err){

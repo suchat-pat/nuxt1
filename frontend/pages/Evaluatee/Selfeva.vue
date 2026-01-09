@@ -30,7 +30,7 @@
                         <v-btn color="success" type="submit">บันทึกคะแนน</v-btn><br><br><br><br>
                     </div>
                 </v-form>
-                <v-alert v-if="user.status_eva === 2 || user.status_eva === 3" type="success">คุณกรอกแบบประเมินล้ว</v-alert>
+                <v-alert v-else-if="user.status_eva === 2 || user.status_eva === 3" type="success">คุณกรอกแบบประเมินล้ว</v-alert>
                 <v-alert v-else type="warning">คุณยังไม่มีแบบประเมิน</v-alert>
             </v-col>
         </v-row>
