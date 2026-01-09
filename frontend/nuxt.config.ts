@@ -24,6 +24,10 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/test-utils',
+<<<<<<< HEAD
+    // '@nuxt/hints'
+=======
     '@nuxt/hints'
+>>>>>>> 0447136f3ea164cdb07b31d5e1dadfe52b1715c6
   ]
 })
