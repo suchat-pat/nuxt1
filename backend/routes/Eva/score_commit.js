@@ -28,7 +28,7 @@ router.get('/indicate',verifyToken,requireRole('ผู้รับการป�
         )
         const id_eva = evaRow.id_eva
         const [topics] = await  db.query(`select * from tb_topic`)
-        const [indicates] = await  db.query(`select * from tb_indicate i,tb_evadetail d where i.id_indicate=d.id_indicate and id_eva=?`,[id_eva])
+        const [indicates] = await  db.query(`select * from tb_indicate i,tb_evadetail d where i.id_indicate=d.id_indicate and id_eva=? and status_eva in (2,3,4)`,[id_eva])
         const result = topics.map(t =>({
             ...t,
             indicates:indicates.filter((i) => i.id_topic === t.id_topic)
@@ -73,12 +73,12 @@ router.get('/scores',verifyToken,requireRole('ผู้รับการปร�
                     c:null,
                 }
             }
-            if(row.status_eva == 2) scores[row.id_indicate].a = row.score_commit
-            if(row.status_eva == 3) scores[row.id_indicate].b = row.score_commit
-            if(row.status_eva == 4) scores[row.id_indicate].c = row.score_commit
-            totalScore += (row.score_commit * row.point_indicate)/3
+            if(row.status_eva == 2) scores[row.id_indicate].a = row.score_commit*row.point_indicate
+            if(row.status_eva == 3) scores[row.id_indicate].b = row.score_commit*row.point_indicate
+            if(row.status_eva == 4) scores[row.id_indicate].c = row.score_commit*row.point_indicate
+            totalScore += (row.score_commit * row.point_indicate) /3
         })
-        console.log("scores:",scores)
+        // console.log("scores:",scores)
         res.json({scores,totalScore})
     }catch(err){
         console.error("Error GET Score",err)

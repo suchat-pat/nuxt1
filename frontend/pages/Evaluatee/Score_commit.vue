@@ -37,7 +37,7 @@
                             </v-table>
                         </v-col>
                     </v-row>
-                    <v-card class="pa-2 mt-4 text-end" color="success">คะแนนรวมสุทธิ {{ totalScore.toFixed(2) || 0 }} คะแนน&nbsp;&nbsp;&nbsp;&nbsp;</v-card>
+                    <v-card class="pa-2 mt-4 text-end" color="success">คะแนนรวมสุทธิ {{ (totalScore).toFixed(2) || 0 }} คะแนน&nbsp;&nbsp;&nbsp;&nbsp;</v-card>
                     <div class="mt-4">
                         <v-card class="pa-2">
                             <label>ข้อเสนอแนะของกรรมการ</label>
@@ -95,7 +95,8 @@ const fetchScore = async () =>{
     try{
         const res = await axios.get(`http://localhost:3001/api/Eva/score_commit/scores`,{headers:{Authorization:`Bearer ${token}`}})
         scores.value = res.data.scores
-        console.log("scores:",scores.value)
+        totalScore.value = res.data.totalScore
+        // console.log("scores:",scores.value)
     }catch(err){
         console.error('Get Indicate Error',err)
     }
