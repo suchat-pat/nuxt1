@@ -28,7 +28,7 @@ router.get('/indicate',verifyToken,requireRole('ผู้รับการป�
         )
         const id_eva = evaRow.id_eva
         const [topics] = await  db.query(`select * from tb_topic`)
-        const [indicates] = await  db.query(`select * from tb_indicate i,tb_evadetail d where i.id_indicate=d.id_indicate and id_eva=? and status_eva in (2,3,4)`,[id_eva])
+        const [indicates] = await  db.query(`select * from tb_indicate`)
         const result = topics.map(t =>({
             ...t,
             indicates:indicates.filter((i) => i.id_topic === t.id_topic)
