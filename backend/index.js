@@ -33,5 +33,15 @@ app.use('/api/Eva/score_member',score_member)
 const score_commit = require('./routes/Eva/score_commit')
 app.use('/api/Eva/score_commit',score_commit)
 
+//commit
+const show_eva = require('./routes/Commit/show_eva')
+app.use('/api/Commit/show_eva',show_eva)
+
+const detail_eva = require('./routes/Commit/detail_eva')
+app.use('/api/Commit/detail_eva',detail_eva)
+
+const save_score = require('./routes/Commit/save_score')
+app.use('/api/Commit/save_score',save_score)
+
 app.use((req,res) => res.status(404).json({message:'ปิดปรับปรุง!'}))
 app.listen(3001 , () => console.log('Server Running On Port 3001'))
